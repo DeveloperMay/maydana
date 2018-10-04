@@ -1,11 +1,11 @@
 class API{
 
 	constructor(){
-
+		//https://mattheuszcabal.000webhostapp.com/
 		this.URL 			= 'https://mattheuszcabal.000webhostapp.com/';
 		this.controlador 	= 'user';
-		this.action 		= 'all';
-		this.method 		= 'POST';
+		this.action 		= '';
+		this.method 		= '';
 		this.token 			= 'Maydana';
 		this.mode 			= 'cors';
 		this.user_id		= null;
@@ -43,30 +43,42 @@ class API{
 
 	get delUser(){
 
+		console.log(this.method);
 		$('#btn-submit').prop("disabled",true);
-		$.ajax({
-			url: this.URL+this.controlador+'/'+this.action+'?t='+this.token,
-			type: 'POST',
-			data: {
-				id: this.user_id
-			},
-			success: function( data, textStatus, jQxhr ){
+		(async () => {
+			const rawResponse = await fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
+				method: this.method,
+			});
 
-				$('#btn-submit').prop("disabled",false);
-				$('#respostaAjax').html( data.data);
-				render_users();
-			},
-			error: function( jqXhr, textStatus, errorThrown ){
-				console.log( errorThrown );
+			const data = await rawResponse.json();
+
+			for(var x in data){
+				users = data[x];
 			}
-		});
+			render_users();
+		})();
 	}
 
-	get getUsers(){
+	get getUser(){
 
-		fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
+		console.log(this.method);
+(async () => {
+	const rawResponse = await fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
+		method: this.method,
+		mode: this.mode
+	});
+
+	const data = await rawResponse.json();
+
+	for(var x in data){
+		users = data[x];
+	}
+	render_users();
+})();
+		/*fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
 			method: this.method,
 			mode: this.mode
+			body: JSON.parti
 		}).then(
 			function(response){
 
@@ -86,7 +98,7 @@ class API{
 		)
 		.catch(function(err) {
 			console.log('Fetch Error :-S', err);
-		});
+		});*/
 	}
 
 	addUser(){
@@ -116,19 +128,23 @@ window.users = [];
 
 function addUser(){
 
-	api.action = 'add';
+	api.action = 'id';
+	api.method = 'POST';
 	api.addUser();
 }
 
 function delUser(id){
 
-	api.action = 'del';
+	api.action = 'id';
+	api.method = 'DELETE';
 	api.user_id = id;
 	api.delUser;
 }
 
 function refreshFetch(){
-	api.getUsers;
+	api.action = '';
+	api.method = 'GET';
+	api.getUser;
 }
 
 function render_users(){
