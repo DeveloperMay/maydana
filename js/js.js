@@ -2,10 +2,11 @@ class API{
 
 	constructor(){
 		//https://mattheuszcabal.000webhostapp.com/
-		this.URL 			= 'https://mattheuszcabal.000webhostapp.com/';
+		this.URL 			= 'https://api.maydana.local/';
 		this.controlador 	= 'user';
 		this.action 		= '';
-		this.method 		= '';
+		this.headers		= new Headers();
+		this.method 		= 'GET';
 		this.token 			= 'Maydana';
 		this.mode 			= 'cors';
 		this.user_id		= null;
@@ -48,6 +49,7 @@ class API{
 		(async () => {
 			const rawResponse = await fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
 				method: this.method,
+				body: JSON.stringify({id: this.user_id})
 			});
 
 			const data = await rawResponse.json();
@@ -61,44 +63,61 @@ class API{
 
 	get getUser(){
 
-		console.log(this.method);
-(async () => {
-	const rawResponse = await fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
-		method: this.method,
-		mode: this.mode
-	});
+	  let resStatus = 0
+	  this.headers.append('Accept', 'application/json');
 
-	const data = await rawResponse.json();
+	  fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
+	    method: this.method,
+	    headers: this.headers
+	  })
+	  .then((res) => {
+	    if(res.ok){
+	    	return res.json()
+	    }else{
+	    	throw new Error('BAD REQUEST :(');
+	    }
+	  })
+	  .then((jsonData) => {
+	   		console.log(jsonData);
+	  })
+	  .catch((err) => {
+	    console.error(err);
+	  });
 
-	for(var x in data){
-		users = data[x];
-	}
-	render_users();
-})();
-		/*fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
-			method: this.method,
-			mode: this.mode
-			body: JSON.parti
-		}).then(
-			function(response){
+		/*(async () => {
 
-				if (response.status !== 200){
-					console.log('Looks like there was a problem. Status Code: ' +response.status);
-					return;
-				}
+			let endpoint = this.URL+this.controlador+'/'+this.action+'?t='+this.token;
 
-				response.json().then(function(data){
+			const promise = await fetch(endpoint, {
+					method: this.method,
+					mode: this.mode
+				})
+				.then( res => {
 
-					for(var x in data){
-						users = data[x];
+					if(!res.ok){
+						throw res
 					}
-					render_users();
-				});
+
+					return res.json()
+				})
+				.then( json => {
+					if(json.res == 'ok'){
+
+					}
+				})
+				.catch( err => {
+					console.log(err);
+				})
+
+			const data = await promise;
+
+			for(var x in data){
+				users = data[x];
 			}
-		)
-		.catch(function(err) {
-			console.log('Fetch Error :-S', err);
-		});*/
+			
+			render_users();
+
+		})();*/
 	}
 
 	addUser(){
@@ -135,8 +154,8 @@ function addUser(){
 
 function delUser(id){
 
-	api.action = 'id';
-	api.method = 'DELETE';
+	api.action = 'del';
+	api.method = 'POST';
 	api.user_id = id;
 	api.delUser;
 }
