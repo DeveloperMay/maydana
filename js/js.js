@@ -65,8 +65,23 @@ class API{
 	  let resStatus = 0
 	  this.headers.append('Accept', 'application/json');
 
-	  fetch(this.URL+this.controlador+this.action+'?t='+this.token, {
-	    method: this.method
+		(async () => {
+			const rawResponse = await fetch(this.URL+this.controlador+this.action, {
+				method: this.method,
+			});
+
+			const data = await rawResponse.json();
+
+			console.log(data);
+		})();
+
+	  /*let resStatus = 0
+	  this.headers.append('Accept', 'application/json');
+	  let endpoint = this.URL+this.controlador+'/'+this.action;
+	  
+	  fetch(endpoint, {
+	    method: this.method,
+	    headers: this.headers
 	  })
 	  .then((res) => {
 	    if(res.ok){
@@ -80,7 +95,7 @@ class API{
 	  })
 	  .catch((err) => {
 	    console.error(err);
-	  });
+	  });*/
 
 		/*(async () => {
 
@@ -118,6 +133,30 @@ class API{
 		})();*/
 	}
 
+	altUser(){
+		$('#btn-submit').prop("disabled",true);
+
+		let resStatus = 0
+	  this.headers.append('Accept', 'application/json');
+
+		(async () => {
+			const rawResponse = await fetch(this.URL+this.controlador+this.action, {
+				method: this.method,
+				body: JSON.stringify({
+
+			    	pes_codigo: "1",
+			    	t: this.token,
+			    	pes_nome: $('#pes_nome').val(),
+					pes_telefone: $('#pes_telefone').val()
+				})
+			});
+
+			const data = await rawResponse.json();
+
+			console.log(data);
+		})();
+	}
+	
 	addUser(){
 		$('#btn-submit').prop("disabled",true);
 
@@ -125,10 +164,10 @@ class API{
 	  this.headers.append('Accept', 'application/json');
 
 		(async () => {
-			const rawResponse = await fetch(this.URL+this.controlador+this.action+'?t='+this.token, {
+			const rawResponse = await fetch(this.URL+this.controlador+this.action, {
 				method: this.method,
 				body: JSON.stringify({
-
+			    	t: this.token,
 			    	pes_nome: $('#pes_nome').val(),
 					pes_telefone: $('#pes_telefone').val()
 				})
@@ -192,6 +231,14 @@ function addUser(){
 	api.action = '/add';
 	api.method = 'POST';
 	api.addUser();
+}
+
+function altUser(){
+
+	api.controlador = 'pessoa';
+	api.action = '/alt';
+	api.method = 'POST';
+	api.altUser();
 }
 
 function delUser(id){
