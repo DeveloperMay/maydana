@@ -16,10 +16,38 @@
   <body>
     <h1>ADD</h1>
     <p id="respostaAjax"></p>
-    <input type="text" id="nome" placeholder="Seu nome" /><br />
-    <input type="number" id="idade" placeholder="Sua idade" /><br />
+
+    <div>NOME</div>
+    <div><input type="text" id="pes_nome" placeholder="Seu nome" /></div>
+
+    <br />
+    <div>TELEFONE</div>
+    <div><input type="number" id="pes_telefone" placeholder="Seu telefone" /></div>
+
+    <br />
+    <div>WHATSAPP</div>
+    <div><input type="number" id="pes_whatsapp" placeholder="Seu whatsapp" /></div>
+
+    <br />
+    <div>SEXO</div>
+    <div><select name="pes_sexo"><option value="1">Mulher</option><option value="2">Homem</option></select></div>
+
+    <br />
+    <div>NASCIMENTO</div>
+    <div><select name="pes_nascimento"><option value="1">Mulher</option><option value="2">Homem</option></select></div>
+
+    <br />
+    <div>RG</div>
+    <div><input type="number" id="pes_rg" placeholder="Seu RG" /></div>
+    <br />
+    <div>CPF</div>
+    <div><input type="number" id="pes_cpf" placeholder="Seu CPF" /></div>
+    <br />
+    <div>EMAIL</div>
+    <div><input type="number" id="pes_email" placeholder="Seu EMAIL" /></div>
+
+
     <button id="btn-submit" onclick="addUser()">Registrar</button>
-    <h1>Users</h1>
     <div id="users-all">aguarde...</div>
   </body>
 </html>

@@ -2,7 +2,7 @@ class API{
 
 	constructor(){
 		//https://mattheuszcabal.000webhostapp.com/
-		this.URL 			= 'https://api.maydana.local/';
+		this.URL 			= 'https://mattheuszcabal.000webhostapp.com/';
 		this.controlador 	= 'user';
 		this.action 		= '';
 		this.headers		= new Headers();
@@ -44,7 +44,6 @@ class API{
 
 	get delUser(){
 
-		console.log(this.method);
 		$('#btn-submit').prop("disabled",true);
 		(async () => {
 			const rawResponse = await fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
@@ -66,9 +65,8 @@ class API{
 	  let resStatus = 0
 	  this.headers.append('Accept', 'application/json');
 
-	  fetch(this.URL+this.controlador+'/'+this.action+'?t='+this.token, {
-	    method: this.method,
-	    headers: this.headers
+	  fetch(this.URL+this.controlador+this.action+'?t='+this.token, {
+	    method: this.method
 	  })
 	  .then((res) => {
 	    if(res.ok){
@@ -122,12 +120,55 @@ class API{
 
 	addUser(){
 		$('#btn-submit').prop("disabled",true);
-		$.ajax({
-			url: this.URL+this.controlador+'/'+this.action+'?t='+this.token,
+
+		let resStatus = 0
+	  this.headers.append('Accept', 'application/json');
+
+		(async () => {
+			const rawResponse = await fetch(this.URL+this.controlador+this.action+'?t='+this.token, {
+				method: this.method,
+				body: JSON.stringify({
+
+			    	pes_nome: $('#pes_nome').val(),
+					pes_telefone: $('#pes_telefone').val()
+				})
+			});
+
+			const data = await rawResponse.json();
+
+			console.log(data);
+		})();
+
+
+	  /*fetch(this.URL+this.controlador+this.action+'?t='+this.token, {
+	    method: this.method,
+	    mode: this.mode,
+	    body: {
+	    	pes_nome: $('#pes_nome').val(),
+			pes_telefone: $('#pes_telefone').val()
+		}
+	  })
+	  .then((res) => {
+	    if(res.ok){
+	    	return res.json()
+	    }else{
+	    	throw new Error('BAD REQUEST :(');
+	    }
+	  })
+	  .then((jsonData) => {
+	   		console.log(jsonData);
+	  })
+	  .catch((err) => {
+	    console.error(err);
+	  });*/
+
+
+		/*$.ajax({
+			url: this.URL+this.controlador+this.action+'?t='+this.token,
 			type: 'POST',
 			data: {
-				nome: $('#nome').val(),
-				idade: $('#idade').val()
+				pes_nome: $('#pes_nome').val(),
+				pes_telefone: $('#pes_telefone').val()
 			},
 			success: function( data, textStatus, jQxhr ){
 
@@ -138,7 +179,7 @@ class API{
 			error: function( jqXhr, textStatus, errorThrown ){
 				console.log( errorThrown );
 			}
-		});
+		});*/
 	}
 
 }
@@ -147,7 +188,8 @@ window.users = [];
 
 function addUser(){
 
-	api.action = 'id';
+	api.controlador = 'pessoa';
+	api.action = '/add';
 	api.method = 'POST';
 	api.addUser();
 }
@@ -162,6 +204,7 @@ function delUser(id){
 
 function refreshFetch(){
 	api.action = '';
+	api.controlador = 'pessoa';
 	api.method = 'GET';
 	api.getUser;
 }
